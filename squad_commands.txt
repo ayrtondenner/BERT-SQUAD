@@ -1,0 +1,60 @@
+pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path D:/Github/BERT-SQUAD/original_1.1/finetuned_lm --do_train --do_eval --do_lower_case --train_file D:/Github/trts_crawler/1.1/train-v1.1.json --predict_file D:/Github/trts_crawler/dev-v1.1.json --per_gpu_train_batch_size 12 --learning_rate 3e-5 --num_train_epochs 3.0 --max_seq_length 128 --doc_stride 128 --output_dir D:/Github/BERT-SQUAD/original_1.1/hugging_face_tutorial
+
+
+--model_type bert
+--model_name_or_path bert-base-multilingual-cased
+--do_train
+--evaluate_during_training
+--do_eval
+--logging_steps 400
+--save_steps 3000
+--task_name=sst-2
+--data_dir=${GLUE_DIR}/SST-2
+--output_dir=./proc_data/sst-2
+--max_seq_length=128
+--learning_rate 1e-5
+--per_gpu_eval_batch_size=16 
+--per_gpu_train_batch_size=16
+--gradient_accumulation_steps=1
+--max_steps=8000
+--model_name=xlnet-large-cased
+--overwrite_output_dir
+--overwrite_cache
+--warmup_steps=120
+
+
+#############################
+
+
+python run_bert_squad.py \
+  --bert_model bert-base-uncased \
+  --do_train \
+  --do_predict \
+  --do_lower_case \
+  --train_file $SQUAD_DIR/train-v1.1.json \
+  --predict_file $SQUAD_DIR/dev-v1.1.json \
+  --train_batch_size 12 \
+  --learning_rate 3e-5 \
+  --num_train_epochs 2.0 \
+  --max_seq_length 384 \
+  --doc_stride 128 \
+  --output_dir /tmp/debug_squad/
+  
+run_squad.py
+--model_type bert
+--model_name_or_path D:/Github/BERT-SQUAD/original_1.1/finetuned_lm
+--do_train
+--do_eval
+--evaluate_during_training 
+--do_lower_case
+--train_file D:/Github/trts_crawler/1.1/train-v1.1.json
+--predict_file D:/Github/trts_crawler/1.1/dev-v1.1.json
+--per_gpu_train_batch_size 16
+--per_gpu_eval_batch_size 16
+--learning_rate 3e-5
+--num_train_epochs 3.0
+--max_seq_length 512
+--doc_stride 128
+--output_dir D:/Github/BERT-SQUAD/original_1.1/hugging_face_tutorial
+--save_steps 1000
+--gradient_accumulation_steps 1
