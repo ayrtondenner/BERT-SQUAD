@@ -41,8 +41,15 @@ def answer(question, text):
             start_scores, end_scores = model(torch.tensor([input_ids]).to('cuda'), token_type_ids=torch.tensor([token_type_ids]).to('cuda'))
             all_tokens = tokenizer.convert_ids_to_tokens(input_ids)
             answer = ' '.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+1]).replace(" ##", "")
-    except expression as identifier:
-        answer = 'ERRO NO PREDICT'
+    except Exception as exc:
+
+        sub_predictions = []
+        sub_texts = [text[i:i+1000] for i in range(0, len(text), 1000)]
+
+        for sub_text in sub_texts:
+            sub_predictions.append(answer(question, sub_text))
+
+        answer = '/'.join(sub_predictions)
     finally:
         return answer
 
