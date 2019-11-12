@@ -20,6 +20,7 @@ def build_deadline_case_test(text):
 
 
 def answer(question, text):
+    answer = ""
     try:
         input_text = "[CLS] " + question + " [SEP] " + text + " [SEP]"
         input_ids = tokenizer.encode(input_text)
@@ -51,6 +52,7 @@ def answer(question, text):
 
         answer = '/'.join(sub_predictions)
     finally:
+        print(f"Answer: {answer}")
         return answer
 
 CASES_TEST = [
