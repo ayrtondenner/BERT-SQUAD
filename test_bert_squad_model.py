@@ -2,7 +2,8 @@ import os, torch
 from transformers import BertTokenizer, BertForQuestionAnswering
 from datetime import datetime
 
-MODEL_PATH = 'D:\\Github\\trts_crawler\\1.1\\corpus server\\trained_benchmark_case_100_cento'
+MODEL_PATH = 'D:/Github/trts_crawler/1.1/corpus server/trained_benchmark_case_100_cento'
+PREDICTION_RESULT_PATH = MODEL_PATH + '/prediction_result.txt'
 TOKEN_LIMITE = 512
 
 DEADLINE_QUESTIONS = [
@@ -677,7 +678,7 @@ model.to('cuda')
 
 prediction_average_time = []
 
-with open(MODEL_PATH + '\\prediction_result.txt', "w") as txt_file:
+with open(PREDICTION_RESULT_PATH, "w") as txt_file:
 
     for case_test in CASES_TEST:
         for question in case_test['questions']:
