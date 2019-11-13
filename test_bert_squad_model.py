@@ -3,6 +3,7 @@ from transformers import BertTokenizer, BertForQuestionAnswering
 from datetime import datetime
 
 MODEL_PATH = 'D:\\Github\\trts_crawler\\1.1\\corpus server\\trained_benchmark_case_100_cento'
+TOKEN_LIMITE = 512
 
 DEADLINE_QUESTIONS = [
     'Qual o prazo?',
@@ -20,40 +21,31 @@ def build_deadline_case_test(text):
 
 
 def answer(question, text):
-    answer = ""
-    try:
-        input_text = "[CLS] " + question + " [SEP] " + text + " [SEP]"
-        input_ids = tokenizer.encode(input_text)
+    #input_text = "[CLS] " + question + " [SEP] " + text + " [SEP]"
+    #input_ids = tokenizer.encode(input_text)
 
-        '''
-        # Predict hidden states features for each layer
-        with torch.no_grad():
-            # See the models docstrings for the detail of the inputs
-            outputs = model(tokens_tensor, token_type_ids=segments_tensors)
-            # Transformers models always output tuples.
-            # See the models docstrings for the detail of all the outputs
-            # In our case, the first element is the hidden state of the last layer of the Bert model
-            encoded_layers = outputs[0]
-        '''
+    used_tokens = len(tokenizer.encode("[CLS] " + question + " [SEP] " + '' + " [SEP]"))
+    remaining_tokens = token_limit - used_tokens
+    text_ids = tokenizer.encode(text)[-remaining_tokens:]
+    input_ids = tokenizer.encode("[CLS] " + question + " [SEP] ") + text_ids + tokenizer.encode(" [SEP]")
 
-        with torch.no_grad():
+    '''
+    # Predict hidden states features for each layer
+    with torch.no_grad():
+        # See the models docstrings for the detail of the inputs
+        outputs = model(tokens_tensor, token_type_ids=segments_tensors)
+        # Transformers models always output tuples.
+        # See the models docstrings for the detail of all the outputs
+        # In our case, the first element is the hidden state of the last layer of the Bert model
+        encoded_layers = outputs[0]
+    '''
 
-            token_type_ids = [0 if i <= input_ids.index(102) else 1 for i in range(len(input_ids))]
-            start_scores, end_scores = model(torch.tensor([input_ids]).to('cuda'), token_type_ids=torch.tensor([token_type_ids]).to('cuda'))
-            all_tokens = tokenizer.convert_ids_to_tokens(input_ids)
-            answer = ' '.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+1]).replace(" ##", "")
-    except Exception as exc:
+    with torch.no_grad():
 
-        sub_predictions = []
-        sub_texts = [text[i:i+1000] for i in range(0, len(text), 1000)]
-
-        for sub_text in sub_texts:
-            sub_predictions.append(answer(question, sub_text))
-
-        answer = '/'.join(sub_predictions)
-    finally:
-        print(f"Answer: {answer}")
-        return answer
+        token_type_ids = [0 if i <= input_ids.index(102) else 1 for i in range(len(input_ids))]
+        start_scores, end_scores = model(torch.tensor([input_ids]).to('cuda'), token_type_ids=torch.tensor([token_type_ids]).to('cuda'))
+        all_tokens = tokenizer.convert_ids_to_tokens(input_ids)
+        answer = ' '.join(all_tokens[torch.argmax(start_scores) : torch.argmax(end_scores)+1]).replace(" ##", "")
 
 CASES_TEST = [
     build_case_test(('No entanto, o valor requerido na inicial figura elevado diante dos elementos trazidos, de modo que fixo em R$8.000,00 '
