@@ -3,8 +3,10 @@ from transformers import BertTokenizer, BertForQuestionAnswering
 from datetime import datetime
 
 MODEL_PATH = 'D:/Github/trts_crawler/1.1/corpus server/trained_benchmark_case_100_cento'
+#MODEL_PATH = '/home/models/bert_pt_br/trained_benchmark_case_100_cento'
+
 PREDICTION_RESULT_PATH = MODEL_PATH + '/prediction_result.txt'
-TOKEN_LIMITE = 512
+TOKEN_LIMIT = 512
 
 DEADLINE_QUESTIONS = [
     'Qual o prazo?',
@@ -26,7 +28,7 @@ def answer(question, text):
     #input_ids = tokenizer.encode(input_text)
 
     used_tokens = len(tokenizer.encode("[CLS] " + question + " [SEP] " + '' + " [SEP]"))
-    remaining_tokens = token_limit - used_tokens
+    remaining_tokens = TOKEN_LIMIT - used_tokens
     text_ids = tokenizer.encode(text)[-remaining_tokens:]
     input_ids = tokenizer.encode("[CLS] " + question + " [SEP] ") + text_ids + tokenizer.encode(" [SEP]")
 
