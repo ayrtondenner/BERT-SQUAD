@@ -1,0 +1,16 @@
+python /home/repositorios/pytorch-transformers/examples/run_squad.py 
+--model_type bert 
+--model_name_or_path /home/models/bert_pt_br/ 
+--do_train 
+--do_eval 
+--do_lower_case 
+--train_file /home/corpora/squad_v11_pt_br/train-v1.1-traduzido-traducao-auto-e-manual-ideado-corrigido_case-50tr.json 
+--predict_file /home/corpora/squad_v11_pt_br/dev-v1.1-traduzido-traducao-auto-e-manual-corrigido_case.json 
+--per_gpu_train_batch_size 8 
+--per_gpu_eval_batch_size 8
+--learning_rate 3e-5 
+--num_train_epochs 3 
+--max_seq_length 384 
+--doc_stride 128 
+--output_dir /home/models/bert_pt_br/trained_partial_benchmark_corrigido_case_50tr --save_steps 1000 
+--gradient_accumulation_steps 2

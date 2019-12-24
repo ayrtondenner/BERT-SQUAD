@@ -1,0 +1,109 @@
+python pregenerate_training_data.py --train_corpus squad_corpus_traduzido.txt --bert_model bert-base-multilingual-cased --do_lower_case --output_dir training/ --epochs_to_generate 3 --max_seq_len 256 64
+
+# Versão de frases
+
+python pregenerate_training_data.py --train_corpus /home/corpora/phrase_classification/solr_corpus.csv  --bert_model bert-base-multilingual-cased --do_lower_case --output_dir /home/models/phrase_classification/training --epochs_to_generate 3 --max_seq_len 1024
+
+#####
+
+python finetune_on_pregenerated.py --pregenerated_data training/ --bert_model bert-base-multilingual-cased --do_lower_case --output_dir finetuned_lm/ --epochs 3
+
+python finetune_on_pregenerated.py --pregenerated_data training/ --bert_model bert-base-multilingual-cased --do_lower_case --output_dir finetuned_lm/ --epochs 3 --train_batch_size 16 4
+
+python finetune_on_pregenerated.py --pregenerated_data D:\\Github\\BERT-SQUAD\\original\\training --bert_model bert-base-multilingual-cased --do_lower_case --output_dir D:\\Github\\BERT-SQUAD\\original\\finetuned_lm --epochs 3  --train_batch_size 16
+
+python finetune_on_pregenerated.py --pregenerated_data training_task9\pregenerate_training_data --bert_model bert-base-multilingual-cased --do_lower_case --output_dir training_task9\finetune_on_pregenerated --epochs 3  --train_batch_size 16
+
+# Versão de frases
+
+python finetune_on_pregenerated.py --pregenerated_data /home/models/phrase_classification/training/ --bert_model bert-base-multilingual-cased --do_lower_case --output_dir /home/models/phrase_classification/finetune/ --epochs 3 --train_batch_size 8
+
+#########
+
+
+python D:\\Github\\pytorch-transformers\\examples\\run_squad.py \
+  --bert_model bert-base-multilingual-cased \
+  --do_train \
+  --do_predict \
+  --do_lower_case \
+  --train_file D:\\Github\\trts_crawler\\train-v2.0-traduzido.json \
+  --predict_file D:\\Github\\trts_crawler\\dev-v2.0-traduzido.json \
+  --train_batch_size 12 \
+  --learning_rate 3e-5 \
+  --num_train_epochs 3.0 \
+  --max_seq_length 128 \
+  --doc_stride 128 \
+  --output_dir D:\\Github\\BERT-SQUAD\\hugging_face_tutorial
+  
+python D:\\Github\\pytorch-transformers\\examples\\run_squad.py \
+  --model_type bert
+  --model_name_or_path bert-base-multilingual-cased \
+  --do_train \
+  --do_predict \
+  --do_lower_case \
+  --train_file D:\\Github\\trts_crawler\\train-v2.0-traduzido.json \
+  --predict_file D:\\Github\\trts_crawler\\dev-v2.0-traduzido.json \
+  --per_gpu_train_batch_size 12 \
+  --learning_rate 3e-5 \
+  --num_train_epochs 3.0 \
+  --max_seq_length 128 \
+  --doc_stride 128 \
+  --output_dir D:\\Github\\BERT-SQUAD\\hugging_face_tutorial
+ 
+ 
+Original do tutorial: 
+python D:\\Github\\pytorch-transformers\\examples\\run_squad.py --model_type bert --model_name_or_path bert-base-multilingual-cased --do_train --do_predict --do_lower_case --train_file D:\\Github\\trts_crawler\\train-v2.0-traduzido.json --predict_file D:\\Github\\trts_crawler\\dev-v2.0-traduzido.json --train_batch_size 12 --learning_rate 3e-5 --num_train_epochs 3.0 --max_seq_length 128 --doc_stride 128 --output_dir D:\\Github\\BERT-SQUAD\\hugging_face_tutorial
+
+Adaptado para versão mais recente do hugging face, com parâmetros corretos:
+python D:\\Github\\pytorch-transformers\\examples\\run_squad.py --model_type bert --model_name_or_path D:\\Github\\BERT-SQUAD\\finetuned_lm --do_train --do_eval --do_lower_case --train_file D:\\Github\\trts_crawler\\train-v2.0-traduzido.json --predict_file D:\\Github\\trts_crawler\\dev-v2.0-traduzido.json --per_gpu_train_batch_size 12 --learning_rate 3e-5 --num_train_epochs 3.0 --max_seq_length 128 --doc_stride 128 --output_dir D:\\Github\\BERT-SQUAD\\hugging_face_tutorial
+
+Se for SQuAD 2.0, --version_2_with_negative
+
+Código com parâmetros modificados: https://github.com/huggingface/pytorch-transformers/issues/795
+
+run_squad.py
+--model_type bert
+--model_name_or_path D:\Github\BERT-SQUAD\original\finetuned_lm
+--do_train
+--do_eval
+--evaluate_during_training 
+--do_lower_case
+--train_file D:\Github\trts_crawler\train-v2.0.json
+--predict_file D:\Github/\trts_crawler\dev-v2.0.json
+--per_gpu_train_batch_size 16
+--per_gpu_train_batch_size 16
+--learning_rate 3e-5
+--num_train_epochs 3.0
+--max_seq_length 128
+--doc_stride 128
+--output_dir D:\Github\BERT-SQUAD\original\hugging_face_tutorial
+--version_2_with_negative
+--save_steps 1000
+--gradient_accumulation_steps 1
+
+
+VERSÃO 1.1 - INGLÊS
+
+D:\>python D:/Github/BERT-SQUAD/pregenerate_training_data.py --train_corpus D:/Github/trts_crawler/1.1/squad_corpus.txt --bert_model bert-base-uncased --do_lower_case --output_dir D:/Github/BERT-SQUAD/original_1.1/training --epochs_to_generate 3
+
+python D:/Github/BERT-SQUAD/finetune_on_pregenerated.py --pregenerated_data D:/Github/BERT-SQUAD/original_1.1/training --bert_model bert-base-uncased --do_lower_case --output_dir D:/Github/BERT-SQUAD/original_1.1/finetuned_lm/ --epochs 3 --train_batch_size 4 
+
+python D:/Github/pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path D:/Github/BERT-SQUAD/original_1.1/finetuned_lm --do_train --do_eval --evaluate_during_training --do_lower_case --train_file D:/Github/trts_crawler/1.1/train-v1.1.json --predict_file D:/Github/trts_crawler/1.1/dev-v1.1.json --per_gpu_train_batch_size 16 --per_gpu_test_batch_size 16 --learning_rate 3e-5 --num_train_epochs 3.0 --max_seq_length 512 --doc_stride 128 --output_dir D:/Github/BERT-SQUAD/original_1.1/hugging_face_tutorial --save_steps 1000 --gradient_accumulation_steps 1
+
+python D:/Github/pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path D:/Github/BERT-SQUAD/original_1.1/finetuned_lm --do_train --do_eval --evaluate_during_training --do_lower_case --train_file D:/Github/trts_crawler/1.1/train-v1.1.json --predict_file D:/Github/trts_crawler/1.1/dev-v1.1.json --per_gpu_train_batch_size 16 --per_gpu_eval_batch_size 16 --learning_rate 3e-5 --num_train_epochs 3.0 --max_seq_length 512 --doc_stride 128 --output_dir D:/Github/BERT-SQUAD/original_1.1/hugging_face_tutorial --save_steps 1000 --gradient_accumulation_steps 1
+
+
+#### MÁQUINA AVISO UBUNTU
+
+python /home/repositorios/pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path /home/models/bert_en_us --do_train --do_eval --evaluate_during_training --do_lower_case --train_file /home/corpora/squad_v11_en_us/train-v1.1.json --predict_file /home/corpora/squad_v11_en_us/dev-v1.1.json --per_gpu_train_batch_size 8 --per_gpu_eval_batch_size 8 --learning_rate 3e-5 --num_train_epochs 2.0 --max_seq_length 512 --doc_stride 128 --output_dir /home/models/bert_en_us/trained --save_steps 1000 --gradient_accumulation_steps 2
+
+python -m torch.distributed.launch --nproc_per_node=2 /home/repositorios/pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path /home/models/bert_en_us --do_train --do_eval --evaluate_during_training --do_lower_case --train_file /home/corpora/squad_v11_en_us/train-v1.1.json --predict_file /home/corpora/squad_v11_en_us/dev-v1.1.json --per_gpu_train_batch_size 24 --per_gpu_eval_batch_size 24 --learning_rate 3e-5 --num_train_epochs 2.0 --max_seq_length 512 --doc_stride 128 --output_dir /home/models/bert_en_us/trained --gradient_accumulation_steps 12
+
+
+#### TREINO MÁQUINA 3 GPUS AVISO - COM XLM
+
+/home/repositorios/pytorch-transformers# python examples/run_squad.py --model_type xlm --model_name_or_path xlm-mlm-17-1280 --do_train --do_eval --evaluate_during_training --do_lower_case --train_file /home/corpora/squad_v11_en_us/train-v1.1.json --predict_file /home/corpora/squad_v11_en_us/dev-v1.1.json --per_gpu_train_batch_size 8 --per_gpu_eval_batch_size 8 --learning_rate 3e-5 --num_train_epochs 2.0 --max_seq_length 512 --doc_stride 128 --output_dir /home//models/bert_en_us/trained/xlm_default_model --save_steps 1000 --gradient_accumulation_steps 2 
+
+######## SQUAD EM PORTUGUÊS
+
+python /home/repositorios/pytorch-transformers/examples/run_squad.py --model_type bert --model_name_or_path /home/models/bert_pt_br/ --do_train --do_eval --do_lower_case --train_file /home/corpora/squad_v11_pt_br/train-v1.1-traduzido-traducao-auto-e-manual-apenas_traducoes_corretas-ideado-corrigido_case_100_cento.json --predict_file /home/corpora/squad_v11_pt_br/dev-v1.1-traduzido-traducao-auto-e-manual-corrigido_case.json --per_gpu_train_batch_size 8 --per_gpu_eval_batch_size 8 --learning_rate 3e-5 --num_train_epochs 3 --max_seq_length 384 --doc_stride 128 --output_dir /home/models/bert_pt_br/trained_benchmark_case_100_cento --save_steps 1000 --gradient_accumulation_steps 2
